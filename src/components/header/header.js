@@ -26,7 +26,19 @@ const HeaderLinks = styled.ul`
     }
 `;
 
-const Header = () => {
+const Button = styled.button`
+    color: white;
+    background-color: inherit;
+    font-size: 18px;
+    border: none;
+    margin-left: -30%;
+
+    :focus {
+        outline: none;
+    }
+`;
+
+const Header = ({toggleRandom}) => {
     return (
         <HeaderBlock>
             <HeaderTitle>
@@ -34,6 +46,10 @@ const Header = () => {
                 Game of Thrones DB
                 </a>
             </HeaderTitle>
+            <Button
+                onClick={toggleRandom}>
+                    Random Character
+            </Button>
             <HeaderLinks>
                 <li>
                     <a href="#">Characters</a>
