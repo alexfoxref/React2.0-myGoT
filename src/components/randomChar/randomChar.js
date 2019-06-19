@@ -32,7 +32,7 @@ export default class RandomChar extends Component {
         char: {},
         loading: true,
         error: false,
-        errorStatus: ''
+        errData: ''
     }
 
     onCharLoaded = (char) => {
@@ -42,11 +42,11 @@ export default class RandomChar extends Component {
         })
     }
 
-    onError = (errorStatus) => {
+    onError = (errData) => {
         this.setState({
             error: true,
             loading: false,
-            errorStatus: errorStatus
+            errData
         });
     }
 
@@ -55,15 +55,15 @@ export default class RandomChar extends Component {
         // const id = 2523352352;
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
-            .catch((errorStatus) => this.onError(errorStatus.message));
+            .catch((errData) => this.onError(errData));
     }
 
     // компонент отвечает за логику
     render() {
 
-        const { char, loading, error, errorStatus } = this.state;
+        const { char, loading, error, errData } = this.state;
 
-        const errorMessage = error ? <ErrorMessage errorStatus={errorStatus}/> : null;
+        const errorMessage = error ? <ErrorMessage errData={errData}/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char}/> : null;
 

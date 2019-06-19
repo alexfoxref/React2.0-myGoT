@@ -14,25 +14,26 @@ const StyledImg = styled.img`
 
 
 
-const ErrorMessage = ({errorStatus}) => {
-    let message = `Unexpexted Error. Something go wrong.`,
+const ErrorMessage = ({errData}) => {
+    let mess = `Unexpexted Error. Something go wrong.`,
         image = imgErr;
+    const {message} = errData;
 
-    switch (errorStatus) {
+    switch (message) {
         case '404':
-            message = `Error ${errorStatus}. The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.`;
+            mess = `Error ${message}. The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.`;
             image = img404;
             break;
         case '408':
-            message = `Error ${errorStatus}. The server did not receive a complete request message within the time that it was prepared to wait.`;
+            mess = `Error ${message}. The server did not receive a complete request message within the time that it was prepared to wait.`;
             image = img408;
             break;
         case '410':
-            message = `Error ${errorStatus}. Access to the target resource is no longer available at the origin server.`;
+            mess = `Error ${message}. Access to the target resource is no longer available at the origin server.`;
             image = img410;
             break;
         case '500':
-            message = `Critical Error ${errorStatus}. Could not connect to server.`;
+            mess = `Critical Error ${message}. Could not connect to server.`;
             image = img500;
             break;
         default:
@@ -41,7 +42,7 @@ const ErrorMessage = ({errorStatus}) => {
 
     return (
         <>
-            <span>{message}</span>
+            <span>{mess}</span>
             <StyledImg src={image} alt="error"></StyledImg>
         </>
     ) 
