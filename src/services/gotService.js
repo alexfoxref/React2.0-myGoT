@@ -8,7 +8,7 @@ export default class GotService {
         const res = await fetch(`${this._apiBase}${url}`);
 
         if (!res.ok) {
-            throw new Error(410)
+            throw new Error(res.status)
         }
         return await res.json();
     }
