@@ -27,11 +27,18 @@ const HeaderLinks = styled.ul`
 `;
 
 const Button = styled.button`
+    padding: 5px;
     color: white;
-    background-color: inherit;
+    background-color: rgba(0,0,0,.1);
     font-size: 18px;
-    border: none;
+    border: 1px solid white;
+    border-radius: 5px;
     margin-left: -30%;
+
+    :hover {
+        background-color: rgba(0,0,0,.5);
+        box-shadow: 0 0 10px white;
+    }
 
     :focus {
         outline: none;

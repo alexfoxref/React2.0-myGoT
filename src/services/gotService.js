@@ -8,7 +8,7 @@ export default class GotService {
         const res = await fetch(`${this._apiBase}${url}`);
 
         if (!res.ok) {
-            throw new Error(res.status)
+            throw new Error(410)
         }
         return await res.json();
     }
@@ -46,8 +46,8 @@ export default class GotService {
         return ({name, region, words, titles, overlord, ancestralWeapons})
     }
     _transformBook(book) {
-        const {name, numberOfPages, publiser, released} = book;
-        return ({name, numberOfPages, publiser, released});
+        const {name, numberOfPages, released} = book;
+        return ({name, numberOfPages, released});
     }
 }
 
