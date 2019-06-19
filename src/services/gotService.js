@@ -37,16 +37,32 @@ export default class GotService {
         return this._transformBook(book);
     }
     // трансформации данных
+    transformModify(input, output) {
+        for (let key in input) {
+            if (input[key] === '') {
+                output[key] = 'Have no data'
+            } else {
+                output[key] = input[key]
+            }
+        }
+    }
+
     _transformCharacter(char) {
-        const {name, gender, born, died, culture} = char;
+        let modChar = {};
+        this.transformModify(char, modChar);
+        const {name, gender, born, died, culture} = modChar;
         return ({name, gender, born, died, culture});
     }
     _transformHouse(house) {
-        const {name, region, words, titles, overlord, ancestralWeapons} = house;
+        let modHouse = {};
+        this.transformModify(house, modHouse);
+        const {name, region, words, titles, overlord, ancestralWeapons} = modHouse;
         return ({name, region, words, titles, overlord, ancestralWeapons})
     }
     _transformBook(book) {
-        const {name, numberOfPages, released} = book;
+        let modBook = {};
+        this.transformModify(book, modBook);
+        const {name, numberOfPages, released} = modBook;
         return ({name, numberOfPages, released});
     }
 }
