@@ -2,26 +2,37 @@ import React, {Component} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
+import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage';
 
 
 export default class App extends Component {
 
     state = {
-        visible: true
+        visibleRandom: true,
+        error: false
+    }
+
+    componentDidCatch() {
+        this.setState({
+            error: true
+        })
     }
 
     toggleRandom = () => {
-        this.setState(({visible}) => ({
-            visible: !visible
+        this.setState(({visibleRandom}) => ({
+            visibleRandom: !visibleRandom
         }))
     }
 
     render() {
-        const {visible} = this.state;
+        const {visibleRandom, error} = this.state;
         
-        const content = visible ? <RandomChar/> : null;
+        if (error) {
+            return <ErrorMessage errData=""/>
+        }
+
+        const content = visibleRandom ? <RandomChar/> : null;
 
         return (
             <> 
@@ -34,14 +45,7 @@ export default class App extends Component {
                             {content}
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails />
-                        </Col>
-                    </Row>
+                    <CharacterPage/>
                 </Container>
             </>
         )

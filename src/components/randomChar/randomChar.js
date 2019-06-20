@@ -21,10 +21,6 @@ const StyledDiv = styled.div`
 `;
 export default class RandomChar extends Component {
 
-    constructor() {
-        super();
-        this.updateChar();
-    }
 
     gotService = new gotService();
 
@@ -33,6 +29,22 @@ export default class RandomChar extends Component {
         loading: true,
         error: false,
         errData: ''
+    }
+
+    componentDidCatch() {
+        this.setState({
+            error: true,
+            loading: false
+        })
+    }
+
+    componentDidMount() {
+        this.updateChar();
+        this.timerId = setInterval(this.updateChar, 3000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
@@ -48,11 +60,11 @@ export default class RandomChar extends Component {
             loading: false,
             errData
         });
+        clearInterval(this.timerId);
     }
 
-    updateChar() {
+    updateChar = () => {
         const id = Math.floor(Math.random()*140 + 25);
-        // const id = 2523352352;
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
             .catch((errData) => this.onError(errData));
@@ -66,6 +78,10 @@ export default class RandomChar extends Component {
         const errorMessage = error ? <ErrorMessage errData={errData}/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char}/> : null;
+
+        if (spinner) {
+            console.log('loadingRandom');
+        }
 
         return (
             <StyledDiv className="rounded">

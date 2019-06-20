@@ -2,6 +2,17 @@ export default class GotService {
 
     constructor() {
         this._apiBase = 'https://anapioficeandfire.com/api';
+        this.transformModify = (input, output) => {
+            for (let key in input) {
+                if (input[key] === '') {
+                    output[key] = 'Have no data'
+                } else {
+                    output[key] = input[key]
+                }
+            }
+            let {url} = output;
+            output['id'] = url.slice(url.lastIndexOf('/') + 1);
+        };
     }
 
     async getResource(url) {
@@ -13,9 +24,10 @@ export default class GotService {
         return await res.json();
     }
     async getAllCharacters() {
-        const res = await this.getResource(`/characters?page=5&pageSize=10`);
+        const res = await this.getResource(`/characters?page=4&pageSize=10`);
         return res.map(this._transformCharacter);
     }
+
     async getCharacter(id) {
         const character = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(character);
@@ -37,33 +49,23 @@ export default class GotService {
         return this._transformBook(book);
     }
     // трансформации данных
-    transformModify(input, output) {
-        for (let key in input) {
-            if (input[key] === '') {
-                output[key] = 'Have no data'
-            } else {
-                output[key] = input[key]
-            }
-        }
-    }
-
-    _transformCharacter(char) {
+    _transformCharacter = (char) => {
         let modChar = {};
         this.transformModify(char, modChar);
-        const {name, gender, born, died, culture} = modChar;
-        return ({name, gender, born, died, culture});
+        const {name, gender, born, died, culture, id} = modChar;
+        return ({name, gender, born, died, culture, id: `char${id}`});
     }
-    _transformHouse(house) {
+    _transformHouse = (house) => {
         let modHouse = {};
         this.transformModify(house, modHouse);
-        const {name, region, words, titles, overlord, ancestralWeapons} = modHouse;
-        return ({name, region, words, titles, overlord, ancestralWeapons})
+        const {name, region, words, titles, overlord, ancestralWeapons, id} = modHouse;
+        return ({name, region, words, titles, overlord, ancestralWeapons, id: `house${id}`})
     }
-    _transformBook(book) {
+    _transformBook = (book) => {
         let modBook = {};
         this.transformModify(book, modBook);
-        const {name, numberOfPages, released} = modBook;
-        return ({name, numberOfPages, released});
+        const {name, numberOfPages, released, id} = modBook;
+        return ({name, numberOfPages, released, id: `book${id}`});
     }
 }
 

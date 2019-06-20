@@ -8,14 +8,26 @@ import img500 from './img/errorCritical.jpg';
 
 import styled from 'styled-components';
 
-const StyledImg = styled.img`
-    width: 100%;
+const StyledBlock = styled.div`
+    position: relative;
+
+    span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: red;
+    }
+
+    img {
+        width: 100%;
+    }
 `;
 
 
 
 const ErrorMessage = ({errData}) => {
-    let mess = `Unexpexted Error. Something go wrong.`,
+    let mess = `Unexpexted Error. Something goes wrong.`,
         image = imgErr;
     const {message} = errData;
 
@@ -41,10 +53,10 @@ const ErrorMessage = ({errData}) => {
     }
 
     return (
-        <>
+        <StyledBlock>
             <span>{mess}</span>
-            <StyledImg src={image} alt="error"></StyledImg>
-        </>
+            <img src={image} alt="error"></img>
+        </StyledBlock>
     ) 
 }
 
