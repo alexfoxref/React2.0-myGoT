@@ -8,9 +8,8 @@ import ErrorMessage from '../errorMessage';
 export default class CharacterPage extends Component {
     
     state = {
-        selectedChar: 120,
-        error: false,
-        loadingCharDetails: false
+        selectedChar: null,
+        error: false
     }
 
     componentDidCatch() {
@@ -21,21 +20,18 @@ export default class CharacterPage extends Component {
 
     onCharSelected = (id) => {
         this.setState({
-            selectedChar: id,
-            loadingCharDetails: true
+            selectedChar: id
         })
     }
 
     render() {
-        const {error, loadingCharDetails, selectedChar} = this.state;
+        const {error, selectedChar} = this.state;
 
         if (error) {
             return <ErrorMessage errData=""/>
         }
 
-        const content = !(error || loadingCharDetails) ? <CharDetails 
-                                                            charId={selectedChar} 
-                                                            loading={loadingCharDetails}/> : null;
+        const content = !(error) ? <CharDetails charId={selectedChar}/> : null;
 
         return (
             <Row>

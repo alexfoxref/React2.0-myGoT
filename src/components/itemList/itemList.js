@@ -15,15 +15,13 @@ export default class ItemList extends Component {
 
     state = {
         charList: null,
-        error: true,
-        errData: '',
-        loading: true
+        error: false,
+        errData: ''
     }
 
     componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
@@ -31,8 +29,7 @@ export default class ItemList extends Component {
         this.gotService.getAllCharacters()
             .then((charList) => {
                 this.setState({
-                    charList,
-                    loading: false
+                    charList
                 })
             })
             .catch((errData) => this.onError(errData))
@@ -41,8 +38,7 @@ export default class ItemList extends Component {
     onError = (errData) => {
         this.setState({
             error: true,
-            errData,
-            loading: false
+            errData
         })
     }
 
@@ -63,17 +59,13 @@ export default class ItemList extends Component {
 
     render() {
 
-        const {charList, error, errData, loading} = this.state;
+        const {charList, error, errData} = this.state;
 
-        const loadingItems = loading ? <Spinner/> : null;
+        const loadingItems = !(charList || error) ? <Spinner/> : null;
         const errorMessage = error ? <ErrorMessage errData={errData}/> : null;
         let items = null;
-        if (!(loading || error)) {
+        if (charList && !error) {
             items = this.renderItems(charList);
-        }
-
-        if (loadingItems) {
-            console.log('loadingItems');
         }
 
         return (

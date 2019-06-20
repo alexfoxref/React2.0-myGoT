@@ -16,19 +16,16 @@ const StyledCharDetails = styled.div`
     text-align: center;
     }
 
-    .select-error {
-        color: #fff;
-        text-align: center;
-        font-size: 26px;
-    }
-
     .term {
         font-weight: bold;
     }
 `;
 
 const SelectError = styled.span`
-    color: white;
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    font-size: 26px;
 `;
 export default class CharDetails extends Component {
 
@@ -38,13 +35,13 @@ export default class CharDetails extends Component {
         char: null,
         error: false,
         errData: '',
-        loading: this.props.loadingCharDetails
+        loadingChar: false
     }
 
     componentDidCatch() {
         this.setState({
             error: true,
-            loading: false
+            loadingChar: false
         })
     }
 
@@ -52,7 +49,7 @@ export default class CharDetails extends Component {
         this.updateChar();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         // Обязательно ВСЕГДА делать проверку на совпадение с предыдущими пропсами
         if (this.props.charId !== prevProps.charId) {
             this.updateChar();
@@ -62,52 +59,46 @@ export default class CharDetails extends Component {
     onCharLoaded = (char) => {
         this.setState({
             char,
-            loading: false
-        })
+            loadingChar: false
+        });
     }
 
     onError = (errData) => {
         this.setState({
             error: true,
             errData,
-            loading: false
+            loadingChar: false
         });
     }
 
-    updateChar() {
+    updateChar = () => {
         const {charId} = this.props;
         if (!charId) {
             return;
         }
-
-        this.setState({loading: true});
-
+        this.setState({
+            loadingChar: true
+        })
         this.gotService.getCharacter(charId)
-            .then(() => this.onCharLoaded())
+            .then(char => this.onCharLoaded(char))
             .catch((errData) => this.onError(errData));
     }
 
     render() {
 
-        const { char, error, errData, loading } = this.state;
+        const { char, error, errData, loadingChar } = this.state;
 
-        const loadingChar = loading ? <Spinner/> : null;
-        const selectError = !(this.state.char || error) ? <SelectError className="select-error">Please select character</SelectError> : null;
-        const errorMessage = error ? <ErrorMessage errData={errData}/> : null;
-        const content = (this.state.char && !error) ? <View char={char}/> : null;
-
-        if (loadingChar) {
-            console.log('loadingChar');
+        if (error) {
+            return <ErrorMessage errData={errData}/>
+        } else if (!error) {
+            if (!(char || loadingChar)) {
+                return <SelectError className="select-error">Please select character</SelectError>
+            } else if (loadingChar) {
+                return <Spinner/>
+            } else if (char) {
+                return <View char={char}/>
+            }
         }
-
-        return (
-            <>
-                {loadingChar}
-                {selectError}
-                {errorMessage}
-                {content}
-            </>
-        );
     }
 }
 

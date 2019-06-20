@@ -9,7 +9,7 @@ import CharacterPage from '../characterPage';
 export default class App extends Component {
 
     state = {
-        visibleRandom: true,
+        visibleRandom: false,
         error: false
     }
 
