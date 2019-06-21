@@ -1,20 +1,26 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import { ListGroup, ListGroupItem } from 'reactstrap';
-import gotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
 
-const StyledListGroupItem = styled(ListGroupItem)`
-    cursor: pointer;
+const StyledListGroup = styled(ListGroup)`
+    background-color: #fff;
+
+    div {
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    li {
+        cursor: pointer;
+    }
 `;
 export default class ItemList extends Component {
 
-    gotService = new gotService();
-
     state = {
-        charList: null,
+        itemList: null,
         error: false,
         errData: ''
     }
@@ -26,10 +32,13 @@ export default class ItemList extends Component {
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
-            .then((charList) => {
+        // передаем функцию в виде props
+        const {getData} = this.props;
+
+        getData()
+            .then((itemList) => {
                 this.setState({
-                    charList
+                    itemList
                 })
             })
             .catch((errData) => this.onError(errData))
@@ -43,37 +52,35 @@ export default class ItemList extends Component {
     }
 
     renderItems(arr) {
-        const {onCharSelected} = this.props;
+        const {onItemSelected, renderItem} = this.props;
 
         return arr.map((item) => {
-            const {name, id} = item;
+            const {id} = item;
+            const label = renderItem(item);
             return (
-                <StyledListGroupItem
+                <ListGroupItem
                     key={id}
-                    onClick={() => onCharSelected(id.replace(/[^\d]/g, ''))}>
-                        {name}
-                </StyledListGroupItem>
+                    onClick={() => onItemSelected(id.replace(/[^\d]/g, ''))}>
+                        {label}
+                </ListGroupItem>
             )
         })
     }
 
     render() {
 
-        const {charList, error, errData} = this.state;
+        const {itemList, error, errData} = this.state;
 
-        const loadingItems = !(charList || error) ? <Spinner/> : null;
+        const loadingItems = !(itemList || error) ? <Spinner/> : null;
         const errorMessage = error ? <ErrorMessage errData={errData}/> : null;
-        let items = null;
-        if (charList && !error) {
-            items = this.renderItems(charList);
-        }
+        const items = (itemList && !error) ? this.renderItems(itemList) : null;
 
         return (
-            <ListGroup>
+            <StyledListGroup className="rounded">
                 {loadingItems}
                 {errorMessage}
                 {items}
-            </ListGroup>
+            </StyledListGroup>
         );
     }
 }

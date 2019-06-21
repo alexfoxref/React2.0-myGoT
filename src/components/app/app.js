@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
-import {Col, Row, Container} from 'reactstrap';
+import {Container} from 'reactstrap';
 import Header from '../header';
-import RandomChar from '../randomChar';
+import RandomItem from '../randomItem';
 import ErrorMessage from '../errorMessage';
-import CharacterPage from '../characterPage';
+import CharactersPage from '../pages/charactersPage';
+import BooksPage from '../pages/booksPage';
+import HousesPage from '../pages/housesPage';
+import gotService from '../../services/gotService';
 
 
 export default class App extends Component {
+
+    gotService = new gotService();
 
     state = {
         visibleRandom: false,
@@ -32,7 +37,15 @@ export default class App extends Component {
             return <ErrorMessage errData=""/>
         }
 
-        const content = visibleRandom ? <RandomChar/> : null;
+        const randomChar = visibleRandom ? <RandomItem 
+                                                getData={this.gotService.getCharacter}
+                                                fields={[
+                                                    {field:"gender", label:"Gender"},
+                                                    {field:"born", label:"Born"},
+                                                    {field:"died", label:"Died"},
+                                                    {field:"culture", label:"Culture"}
+                                                ]}
+                                                label="Random character:"/> : null;
 
         return (
             <> 
@@ -40,12 +53,10 @@ export default class App extends Component {
                     <Header toggleRandom={this.toggleRandom}/>
                 </Container>
                 <Container>
-                    <Row>
-                        <Col lg={{size: 5, offset: 0}}>
-                            {content}
-                        </Col>
-                    </Row>
-                    <CharacterPage/>
+                    {randomChar}
+                    <CharactersPage/>
+                    <BooksPage/>
+                    <HousesPage/>
                 </Container>
             </>
         )
