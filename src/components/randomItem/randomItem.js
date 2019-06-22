@@ -18,7 +18,7 @@ export default class RandomItem extends Component {
 
     componentDidMount() {
         this.updateItem();
-        this.timerId = setInterval(this.updateItem, 2000);
+        this.timerId = setInterval(this.updateItem, 15000);
     }
 
     componentWillUnmount() {

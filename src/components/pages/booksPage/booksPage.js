@@ -16,7 +16,8 @@ const BooksPage = () => {
                 {field:"released", label:"Released"}
             ]}
             selectError="Please select a book from the list."
-            label=""/>
+            label=""
+            dynamic/>
             
     )
 };

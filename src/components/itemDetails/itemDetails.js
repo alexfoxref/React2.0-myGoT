@@ -9,6 +9,7 @@ const StyledItemDetails = styled.div`
     background-color: #fff;
     padding: 25px 25px 15px 25px;
     margin-bottom: 40px;
+    max-width: 540px;
     
     h4 {
         margin-bottom: 20px;
@@ -47,7 +48,8 @@ const Field = ({item, field, label}) => {
     )
 }
 export {
-    Field
+    Field,
+    SelectError
 }
 
 export default class ItemDetails extends Component {

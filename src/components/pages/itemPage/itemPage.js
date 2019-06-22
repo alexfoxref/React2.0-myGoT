@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import ItemList from '../../itemList';
-import ItemDetails, {Field} from '../../itemDetails';
+import ItemDetails, {Field, SelectError} from '../../itemDetails';
 import ErrorMessage from '../../errorMessage';
 import RowBlock from '../../rowBlock';
+import {withRouter} from 'react-router-dom';
 
-export default class ItemPage extends Component {
+class ItemPage extends Component {
     
     state = {
         selectedItem: null,
-        error: false
+        error: false,
     }
 
     componentDidCatch() {
@@ -18,14 +19,20 @@ export default class ItemPage extends Component {
     }
 
     onItemSelected = (id) => {
-        this.setState({
-            selectedItem: id
-        })
+        const {dynamic} = this.props;
+        if (!dynamic) {
+            this.setState({
+                selectedItem: id
+            })
+        } else {
+            // из компонента высшего порядка withRouter
+            this.props.history.push(id)
+        }
     }
 
     render() {
         const {error, selectedItem} = this.state;
-        const {getDataList, renderItem, fields, getData, selectError, label} = this.props;
+        const {getDataList, renderItem, fields, getData, selectError, label, dynamic} = this.props;
 
         if (error) {
             return <ErrorMessage errData=""/>
@@ -57,10 +64,18 @@ export default class ItemPage extends Component {
             </ItemDetails>
         );
 
-        const content = !(error) ? itemDetails : null;
+        const content = !error ? itemDetails : null;
 
-        return (
-            <RowBlock left={itemList} right={content}/>
-        )
+        const pageContent = dynamic ? 
+            <RowBlock 
+                left={itemList} 
+                right={<SelectError className="select-error">{selectError}</SelectError>}/> :
+            <RowBlock 
+                left={itemList} 
+                right={content}/>;
+
+        return pageContent;
     }
 }
+
+export default withRouter(ItemPage);

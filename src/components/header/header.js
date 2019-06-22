@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 const HeaderBlock = styled.div`
     display: flex;
@@ -49,23 +50,24 @@ const Header = ({toggleRandom}) => {
     return (
         <HeaderBlock>
             <HeaderTitle>
-                <a href="#">
+                <Link to="/">
                 Game of Thrones DB
-                </a>
+                </Link>
             </HeaderTitle>
             <Button
                 onClick={toggleRandom}>
                     Random Character
             </Button>
             <HeaderLinks>
+                {/* Закрывающий / в путях для того, чтобы переходить в папку и использовать относительные пути */}
                 <li>
-                    <a href="#">Characters</a>
+                    <Link to="/characters/">Characters</Link>
                 </li>
                 <li>
-                    <a href="#">Houses</a>
+                    <Link to="/houses/">Houses</Link>
                 </li>
                 <li>
-                    <a href="#">Books</a>   
+                    <Link to="/books/">Books</Link>   
                 </li>
             </HeaderLinks>
         </HeaderBlock>

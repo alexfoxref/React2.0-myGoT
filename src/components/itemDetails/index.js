@@ -1,5 +1,6 @@
-import ItemDetails, {Field} from './itemDetails';
+import ItemDetails, {Field, SelectError} from './itemDetails';
 export default ItemDetails;
 export {
-    Field
+    Field,
+    SelectError
 }
